@@ -1,12 +1,12 @@
 namespace Host.Registrations;
 
+[ExtendObjectType(OperationTypeNames.Query)]
 public class RegistrationQueries
 {
-    public Registration[] GetRegistrations()
+    public static Registration GetRegistration()
     {
-        return new[]
-        {
-            new Registration()
-        };
+        return new Registration();
     }
+    public static IQueryable<Registration> GetRegistrations(RegistrationDbContext context) =>
+        context.Set<Registration>();
 }

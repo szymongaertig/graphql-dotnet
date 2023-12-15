@@ -5,36 +5,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
-services.AddDbContext<RegistrationDbContext>(o => o.UseSqlite("Data Source=../registrations.db"));
-services.AddDbContext<ClientsDbContext>(o => o.UseSqlite("Data Source=../clients.db"));
+var dbsPath = Environment.GetEnvironmentVariable("DBS_PATH");
+
+services.AddDbContext<RegistrationDbContext>(o => o.UseSqlite($"Data Source={dbsPath}/registrations.db"));
+services.AddDbContext<ClientsDbContext>(o => o.UseSqlite($"Data Source={dbsPath}/clients.db"));
 
 var serviceProvider = services.BuildServiceProvider();
 
-Console.WriteLine("Creating registrations db");
 var registrationDbContext = serviceProvider.GetService<RegistrationDbContext>();
-await registrationDbContext.Database.EnsureCreatedAsync();
-var registrations = registrationDbContext.Registrations.ToList();
+var migrations = registrationDbContext.Database.GetMigrations();
 
-Console.WriteLine("Creating clients db");
+
 var clientsDbContext = serviceProvider.GetService<ClientsDbContext>();
-
+await clientsDbContext.Database.MigrateAsync();
 
 for (var i = 0; i < 100; i++)
 {
     var client = ClientFactory.Create();
-    var registration = new Registration()
-    {
-        ClientId = client.Id,
-        Id = Guid.NewGuid(),
-        CreationDate = DateTime.Now,
-        Status = RegistrationStatus.Confirmed
-    };
+    var registration = RegistrationFactory.Create(client.Id);
     registrationDbContext.Add(registration);
     clientsDbContext.Add(client);
 }
 
 registrationDbContext.SaveChanges();
 clientsDbContext.SaveChanges();
+
 
 
 

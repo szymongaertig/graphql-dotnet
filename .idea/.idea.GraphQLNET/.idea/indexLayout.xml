@@ -3,6 +3,7 @@
   <component name="UserContentModel">
     <attachedFolders>
       <Path>../../graphql-net</Path>
+      <Path>Dbs</Path>
     </attachedFolders>
     <explicitIncludes />
     <explicitExcludes />
