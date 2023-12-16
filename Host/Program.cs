@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
-var dbsPath = Environment.GetEnvironmentVariable("DBS_PATH");
+var connectionString = builder.Configuration.GetConnectionString("sqlite");
 
 builder.Services.AddDbContextPool<RegistrationDbContext>(optionsBuilder =>
-    optionsBuilder.UseSqlite($"Data Source={dbsPath}/registrations.db"));
+    optionsBuilder.UseSqlite(connectionString));
 
 builder.Services.AddHttpClient<IClientsService>(client =>
     {
@@ -29,3 +29,5 @@ var app = builder.Build();
 
 app.MapGraphQL();
 app.Run();
+
+public partial class Program { }

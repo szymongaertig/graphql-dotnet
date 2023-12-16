@@ -13,6 +13,5 @@ public class Registration
     public int ClientId { get; set; }
     [Required]
     public RegistrationStatus Status { get; set; }
-    
     public Event Event { get; set; }
 }

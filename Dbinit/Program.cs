@@ -13,10 +13,13 @@ Log.Logger = new LoggerConfiguration()
 var services = new ServiceCollection();
 var dbsPath = Environment.GetEnvironmentVariable("DBS_PATH");
 
-services.AddDbContext<RegistrationDbContext>(o => 
-    o.UseSqlite($"Data Source={dbsPath}/registrations.db").EnableSensitiveDataLogging());
-services.AddDbContext<ClientsDbContext>(o => o.UseSqlite($"Data Source={dbsPath}/clients.db")
-    .EnableSensitiveDataLogging());
+services.AddDbContext<RegistrationDbContext>(o =>
+    o.UseSqlite($"Data Source={dbsPath}/registrations.db")
+        .EnableSensitiveDataLogging());
+
+services.AddDbContext<ClientsDbContext>(o =>
+    o.UseSqlite($"Data Source={dbsPath}/clients.db")
+        .EnableSensitiveDataLogging());
 
 var serviceProvider = services.BuildServiceProvider();
 var registrationDbContext = serviceProvider.GetService<RegistrationDbContext>();
@@ -35,10 +38,10 @@ for (var eventId = 1; eventId <= 3; eventId++)
         Id = eventId,
         EventName = $"Event {eventId}"
     };
-    
+
     registrationDbContext.Events.Add(@event);
-    
-    for (var i = (eventId-1)*100+1; i <= eventId*100; i++)
+
+    for (var i = (eventId - 1) * 100 + 1; i <= eventId * 100; i++)
     {
         var client = ClientFactory.Create(i);
         var registration = RegistrationFactory.Create(i);
@@ -50,8 +53,6 @@ for (var eventId = 1; eventId <= 3; eventId++)
         Log.Logger.Information("Registration {RegistrationId} has been created", i);
     }
 }
-
-
 
 registrationDbContext.SaveChanges();
 clientsDbContext.SaveChanges();
