@@ -20,7 +20,7 @@ builder.Services.AddSingleton<IEmailService, EmailServiceGrpc>();
 builder.Services
     .AddGrpcClient<Emails.Email.EmailClient>(o =>
     {
-        o.Address = new Uri("https://localhost:5002");
+        o.Address = new Uri("http://localhost:5002");
     })
     .ConfigurePrimaryHttpMessageHandler(() =>
     {
@@ -42,6 +42,7 @@ builder.Services
 
 var app = builder.Build();
 
+var email = await app.Services.GetService<IEmailService>().GetClientEmails(1);
 app.MapGraphQL();
 app.Run();
 
