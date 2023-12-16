@@ -6,9 +6,6 @@ using Refit;
 var builder = WebApplication.CreateBuilder(args);
 var dbsPath = Environment.GetEnvironmentVariable("DBS_PATH");
 
-//builder.services.AddDbContext
-//builder.services.AddDbContextFactory
-
 builder.Services.AddDbContextPool<RegistrationDbContext>(optionsBuilder =>
     optionsBuilder.UseSqlite($"Data Source={dbsPath}/registrations.db"));
 
@@ -25,7 +22,8 @@ builder.Services
     .AddFiltering()
     .AddSorting()
     .AddProjections()
-    .AddType<RegistrationType>();
+    .AddType<RegistrationType>()
+    .AddDataLoader<ClientsByIdsDataLoader>();
 
 var app = builder.Build();
 

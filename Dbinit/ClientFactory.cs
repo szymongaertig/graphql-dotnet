@@ -33,7 +33,7 @@ public static class ClientFactory
     private static readonly string[] _names;
     private static readonly string[] _surnames;
 
-    public static Client Create()
+    public static Client Create(int id)
     {
         var name = _names[Random.Shared.Next(0, _names.Length - 1)];
         var surname = _surnames[Random.Shared.Next(0, _surnames.Length - 1)];
@@ -41,7 +41,7 @@ public static class ClientFactory
         var email = $"{name}.{surname.Substring(0, surname.Length / 2)}.{Random.Shared.Next(70, 99)}@{domain}";
         var client = new Client()
         {
-            Id = Guid.NewGuid(),
+            Id = id,
             Name = name,
             Surname = surname,
             EmailAddress = email

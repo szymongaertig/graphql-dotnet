@@ -10,12 +10,12 @@ public static class RegistrationFactory
     {
     }
 
-    public static Registration Create(Guid clientId)
+    public static Registration Create(int id)
     {
         var registration = new Registration()
         {
-            ClientId = clientId,
-            Id = Guid.NewGuid(),
+            ClientId = id,
+            Id = id,
             CreationDate = DateTime.Now.AddSeconds(-_random.Next(100000)),
             Status = _random.Next(100) > 50 ? RegistrationStatus.Confirmed : RegistrationStatus.WaitingForConfirmation
         };
