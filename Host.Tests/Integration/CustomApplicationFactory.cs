@@ -2,7 +2,6 @@ using Host.Registrations;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.Memory;
-using Moq;
 
 namespace Host.Tests.Integration;
 

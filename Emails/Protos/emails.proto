@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "Emails";
+
+package emails;
+
+service Email {
+  rpc GetClientEmails(ClientRequest) returns (EmailList);
+}
+
+message ClientRequest {
+  int32 clientId = 1;
+}
+
+message EmailEntry {
+  int32 id = 1;
+  string subject = 2;
+  string body = 3;
+}
+
+message EmailList {
+  repeated EmailEntry emails = 1;
+}

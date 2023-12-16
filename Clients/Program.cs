@@ -7,9 +7,10 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
-var dbsPath = Environment.GetEnvironmentVariable("DBS_PATH");
+var connectionString = builder.Configuration.GetConnectionString("sqlite");
+
 builder.Services.AddDbContextPool<ClientsDbContext>(optionsBuilder =>
-    optionsBuilder.UseSqlite($"Data Source={dbsPath}/clients.db"));
+    optionsBuilder.UseSqlite(connectionString));
 
 var app = builder.Build();
 

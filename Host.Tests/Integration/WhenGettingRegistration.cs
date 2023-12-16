@@ -2,7 +2,6 @@ using FluentAssertions;
 using Host.Events;
 using Host.Registrations;
 using Host.Tests.Integration;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using Newtonsoft.Json.Linq;
 using Xunit;

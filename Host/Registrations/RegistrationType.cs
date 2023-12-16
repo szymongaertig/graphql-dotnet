@@ -1,5 +1,6 @@
 using Clients;
 using Host.Clients;
+using Host.Email;
 
 namespace Host.Registrations;
 
@@ -27,6 +28,16 @@ public class RegistrationType : ObjectType<Registration>
                 var loader = cx.DataLoader<ClientsByIdsDataLoader>();
                 var parent = cx.Parent<Registration>();
                 return loader.LoadAsync(parent.ClientId, ct);
+            });
+
+        descriptor
+            .Field("emails")
+            .Resolve<Emails.EmailEntry[]?>(async (cx, ct) =>
+            {
+                var service = cx.Service<IEmailService>();
+                var parent = cx.Parent<Registration>();
+                var result = await service.GetClientEmails(parent.ClientId);
+                return result.Emails.ToArray();
             });
 
         base.Configure(descriptor);
