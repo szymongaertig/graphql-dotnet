@@ -12,7 +12,7 @@ public class CustomApplicationFactory : WebApplicationFactory<Program>
 
     public CustomApplicationFactory()
     {
-        _dbPath = Path.Combine(Path.GetTempPath(), "registrations.db");
+        _dbPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}.db");
         _dbConnectionString = $"Data Source={_dbPath}";
     }
 
@@ -23,9 +23,14 @@ public class CustomApplicationFactory : WebApplicationFactory<Program>
         return new RegistrationDbContext(optionsBuilder.Options);
     }
 
-    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    protected override IHostBuilder? CreateHostBuilder()
     {
         CreateDb();
+        return base.CreateHostBuilder();
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
         var memoryConfigurationSource = new MemoryConfigurationSource()
         {
             InitialData = new[]

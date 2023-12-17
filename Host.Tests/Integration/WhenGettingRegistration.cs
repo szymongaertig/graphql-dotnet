@@ -12,7 +12,6 @@ namespace Angeleo.AffiliateService.Tests.Framework;
 public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
 {
     private readonly CustomApplicationFactory _factory;
-    private Random _random = new Random();
 
     public WhenGettingRegistration(CustomApplicationFactory factory)
     {
@@ -102,7 +101,7 @@ public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
         result.data["registrations"]["nodes"]?.FirstOrDefault()?.Value<int>("clientId").Should()
             .Be(registration.ClientId);
     }
-    
+
     [Fact]
     public async Task ForExistingRegistration_ThenReturnsValidRegistration()
     {

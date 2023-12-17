@@ -14,8 +14,6 @@ public class WhenGettingRegistration
     {
         // Arrange
         using var fixture = new RegistrationFixture();
-        var dbContext = fixture.GetDbContext();
-        await dbContext.Database.MigrateAsync();
         var registration = new RegistrationMockBuilder().Build();
 
         // Act
@@ -46,10 +44,9 @@ public class WhenGettingRegistration
     {
         // Arrange
         using var fixture = new RegistrationFixture();
-        var dbContext = fixture.GetDbContext();
-        await dbContext.Database.MigrateAsync();
-        var registration = new RegistrationMockBuilder().Build();
 
+        var dbContext = fixture.GetDbContext();
+        var registration = new RegistrationMockBuilder().Build();
         dbContext.Add(registration);
         dbContext.SaveChanges();
 

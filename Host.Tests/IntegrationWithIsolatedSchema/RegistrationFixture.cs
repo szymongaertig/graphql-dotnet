@@ -14,14 +14,16 @@ public class RegistrationFixture : IDisposable
 
     public RegistrationFixture()
     {
-        _dbPath = Path.Combine(Path.GetTempPath(), "registrations.db");
+        _dbPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}.db");
         _dbConnectionString = $"Data Source={_dbPath}";
+        var dbContext = GetDbContext();
+        dbContext.Database.Migrate();
     }
 
     public RegistrationDbContext GetDbContext()
     {
         var optionsBuilder = new DbContextOptionsBuilder<RegistrationDbContext>();
-        optionsBuilder.UseSqlite(_dbConnectionString).EnableSensitiveDataLogging();
+        optionsBuilder.UseSqlite(_dbConnectionString);
         return new RegistrationDbContext(optionsBuilder.Options);
     }
 
@@ -36,7 +38,7 @@ public class RegistrationFixture : IDisposable
         }
     }
 
-    public QueryRequest BuildQueryRequest(string query, Dictionary<string, object> variables)
+    private QueryRequest BuildQueryRequest(string query, Dictionary<string, object> variables)
     {
         var request = new QueryRequest(new QuerySourceText(query), null, null, null, variables);
         return request;
@@ -60,7 +62,6 @@ public class RegistrationFixture : IDisposable
             .BuildRequestExecutorAsync();
         var request = BuildQueryRequest(query, variables);
         var result = await executor.ExecuteAsync(request);
-        
         result.ExpectQueryResult();
         
         return JObject.Parse(result.ToJson());
