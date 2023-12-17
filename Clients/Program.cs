@@ -25,6 +25,8 @@ app.MapGet("clients", async (ClientsDbContext dbContext, HttpRequest request) =>
         var clientIdList = clientIds.ToString().Split(",")
             .Select(x => int.Parse(x));
         Log.Logger.Information("Returning all clients with {Ids}", clientIds);
+        
+        #region todo
         /*
          below implementation does not return any results.
          
@@ -34,6 +36,8 @@ app.MapGet("clients", async (ClientsDbContext dbContext, HttpRequest request) =>
             
          */
         // todo: fix replace with implementation, that will not load full db before filtering
+        #endregion
+        
         var allClients = await dbContext.Set<Client>()
             .ToListAsync();
         return allClients.Where(client => clientIdList.Contains(client.Id));

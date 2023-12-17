@@ -2,8 +2,10 @@ using FluentAssertions;
 using Host.Events;
 using Host.Registrations;
 using Host.Tests.Integration;
+using Host.Tests.Mocks;
 using Moq;
 using Newtonsoft.Json.Linq;
+using Snapshooter.Xunit;
 using Xunit;
 
 namespace Angeleo.AffiliateService.Tests.Framework;
@@ -42,30 +44,84 @@ public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
             registrationId = registration.Id
         });
 
-        
+
         // Assert
-        var nodes = (JArray)result.data["registrations"]["nodes"];
-        nodes.Should().BeEmpty();
+        Snapshot.Match(result.data);
     }
 
+
+    [Fact]
+    public async Task ForExistingRegistration_ThenReturnsValidRegistrationId()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var registration = new RegistrationMockBuilder().Build();
+        await _factory.ArrangeRegistration(registration);
+
+        // Act
+        var result = await client.InvokeGraphQlRequestWithVariables(@"
+          query getRegistrations($registrationId: Int!) {
+          registrations(where: {id : {eq: $registrationId }}) {
+            nodes {
+              id
+            }
+          }
+        }
+        ", new
+        {
+            registrationId = registration.Id
+        });
+
+        // Assert
+        var registrationId = result.data["registrations"]["nodes"]?.FirstOrDefault()?.Value<int>("id");
+        registrationId.Should().Be(registration.Id);
+    }
+
+    [Fact]
+    public async Task ForExistingRegistration_ThenReturnsValidClientId()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        var registration = new RegistrationMockBuilder().Build();
+        await _factory.ArrangeRegistration(registration);
+
+        // Act
+        var result = await client.InvokeGraphQlRequestWithVariables(@"
+          query getRegistrations($registrationId: Int!) {
+          registrations(where: {id : {eq: $registrationId }}) {
+            nodes {
+              clientId
+            }
+          }
+        }
+        ", new
+        {
+            registrationId = registration.Id
+        });
+
+        // Assert
+        result.data["registrations"]["nodes"]?.FirstOrDefault()?.Value<int>("clientId").Should()
+            .Be(registration.ClientId);
+    }
+    
     [Fact]
     public async Task ForExistingRegistration_ThenReturnsValidRegistration()
     {
         // Arrange
         var client = _factory.CreateClient();
+        var registrationId = 10;
         var registration = new Registration()
         {
-            Id = _random.Next(),
-            Event = new Event()
+            Id = registrationId,
+            Event = new Event
             {
-                Id = _random.Next(),
-                EventName = Guid.NewGuid().ToString()
+                Id = 1,
+                EventName = "This is some event2"
             },
-            ClientId = _random.Next(),
+            ClientId = 100,
             Status = RegistrationStatus.Confirmed,
-            CreationDate = DateTime.Now
+            CreationDate = new DateTime(2023, 10, 10)
         };
-        
         await _factory.ArrangeRegistration(registration);
 
         // Act
@@ -77,19 +133,19 @@ public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
               creationDate
               clientId
               status
+              event {
+                id
+                eventName
+              }
             }
           }
         }
         ", new
         {
-            registrationId = registration.Id
+            registrationId = registrationId
         });
 
         // Assert
-        var registrationId = result.data["registrations"]?["nodes"]?[0]["id"];
-        var clientId = result.data["registrations"]?["nodes"]?[0]["clientId"];
-        
-        clientId.Value<int>().Should().Be(registration.ClientId);
-        registrationId.Value<int>().Should().Be(registration.Id);
+        Snapshot.Match(result.data);
     }
 }

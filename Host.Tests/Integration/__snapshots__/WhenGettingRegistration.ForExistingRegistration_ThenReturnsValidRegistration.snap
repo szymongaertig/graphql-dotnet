@@ -1,0 +1,16 @@
+﻿{
+  "registrations": {
+    "nodes": [
+      {
+        "id": 10,
+        "creationDate": "2023-10-10T00:00:00+02:00",
+        "clientId": 100,
+        "status": "CONFIRMED",
+        "event": {
+          "id": 1,
+          "eventName": "This is some event2"
+        }
+      }
+    ]
+  }
+}

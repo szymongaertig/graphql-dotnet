@@ -42,8 +42,6 @@ builder.Services
 
 var app = builder.Build();
 
-var email = await app.Services.GetService<IEmailService>().GetClientEmails(1);
 app.MapGraphQL();
 app.Run();
-
 public partial class Program { }

@@ -33,11 +33,14 @@
 
     <ItemGroup>
       <Content Remove="Integration\SchemaQuery.json" />
-      <EmbeddedResource Include="Integration\SchemaQuery.json" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Integration\__snapshots__" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Integration\SchemaQuery.json" />
     </ItemGroup>
 
 </Project>
