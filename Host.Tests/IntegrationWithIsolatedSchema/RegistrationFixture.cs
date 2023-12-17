@@ -1,6 +1,9 @@
 using Host.Registrations;
-using HotChocolate.Execution;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using HotChocolate;
+using HotChocolate.Execution;
+using Path = System.IO.Path;
 
 namespace Host.Tests.Units;
 
@@ -40,4 +43,26 @@ public class RegistrationFixture : IDisposable
     }
 
     public string GetConnectionString() => _dbConnectionString;
+
+    public async Task<JObject> ExecuteGraphqlRequest(string query,
+        Dictionary<string, object> variables,
+        Action<ServiceCollection> serviceInstaller)
+    {
+        var serviceCollection = new ServiceCollection();
+
+        if (serviceInstaller != null)
+        {
+            serviceInstaller.Invoke(serviceCollection);
+        }
+
+        var executor = await serviceCollection.AddGraphQLServer()
+            .AddRegistartionGraphQL()
+            .BuildRequestExecutorAsync();
+        var request = BuildQueryRequest(query, variables);
+        var result = await executor.ExecuteAsync(request);
+        
+        result.ExpectQueryResult();
+        
+        return JObject.Parse(result.ToJson());
+    }
 }
