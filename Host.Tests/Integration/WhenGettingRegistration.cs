@@ -134,7 +134,6 @@ public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
               status
               event {
                 id
-                eventName
               }
             }
           }
@@ -145,6 +144,6 @@ public class WhenGettingRegistration : IClassFixture<CustomApplicationFactory>
         });
 
         // Assert
-        Snapshot.Match(result.data);
+        result.data.MatchSnapshot();
     }
 }

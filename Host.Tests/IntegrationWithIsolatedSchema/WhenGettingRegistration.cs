@@ -13,7 +13,7 @@ public class WhenGettingRegistration
     public async Task ForNotExistingRegistration_ThenReturnsValidRegistrationId()
     {
         // Arrange
-        var fixture = new RegistrationFixture();
+        using var fixture = new RegistrationFixture();
         var dbContext = fixture.GetDbContext();
         await dbContext.Database.MigrateAsync();
         var registration = new RegistrationMockBuilder().Build();
@@ -45,7 +45,7 @@ public class WhenGettingRegistration
     public async Task ThenReturnsValidRegistrationId()
     {
         // Arrange
-        var fixture = new RegistrationFixture();
+        using var fixture = new RegistrationFixture();
         var dbContext = fixture.GetDbContext();
         await dbContext.Database.MigrateAsync();
         var registration = new RegistrationMockBuilder().Build();

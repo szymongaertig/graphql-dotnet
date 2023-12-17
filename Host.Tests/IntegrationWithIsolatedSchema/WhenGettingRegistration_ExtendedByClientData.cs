@@ -14,7 +14,7 @@ public class WhenGettingRegistration_ExtendedByClientData
     public async Task ThenReturnsValidEmailAddress()
     {
         // Arrange
-        var fixture = new RegistrationFixture();
+        using var fixture = new RegistrationFixture();
         var dbContext = fixture.GetDbContext();
         await dbContext.Database.MigrateAsync();
         var registration = new RegistrationMockBuilder().Build();
