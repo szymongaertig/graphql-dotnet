@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="..\Emails\Protos\emails.proto"/>
+        <Protobuf Include="..\Emails\Protos\emails.proto" />
         <InternalsVisibleTo Include="Host.Tests" />
         <PackageReference Include="HotChocolate.AspNetCore" Version="14.0.0-p.19" />
         <PackageReference Include="HotChocolate.Data.EntityFramework" Version="14.0.0-p.19" />

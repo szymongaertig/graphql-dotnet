@@ -1,3 +1,4 @@
+using Host;
 using Host.Clients;
 using Host.Email;
 using Host.Registrations;
@@ -32,13 +33,7 @@ builder.Services
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<RegistrationQueries>()
-    .RegisterDbContext<RegistrationDbContext>()
-    .AddFiltering()
-    .AddSorting()
-    .AddProjections()
-    .AddType<RegistrationType>()
-    .AddDataLoader<ClientsByIdsDataLoader>();
+    .AddRegistartionGraphQL();
 
 var app = builder.Build();
 

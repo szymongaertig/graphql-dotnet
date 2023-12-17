@@ -4,7 +4,6 @@ using Host.Registrations;
 using Host.Tests.Integration;
 using Host.Tests.Mocks;
 using Moq;
-using Newtonsoft.Json.Linq;
 using Snapshooter.Xunit;
 using Xunit;
 
